@@ -1,12 +1,11 @@
-# 浮光壁纸
+# Stillglass
 
-把清晰照片装进带折射边缘的玻璃窗格，生成 iPhone 锁屏壁纸。
+Create iPhone wallpapers with a sharp photo set into a glass frame and a softened background.
 
-- 选择内置样片或自己的照片，拖动取景并调整缩放、窗格宽度、高度、上下位置和背景虚化。
-- 查看带锁屏时钟的预览，点「晃动预览」体验视差。
-- 导出 1320 × 2868 或 2160 × 4693 的无损 PNG。合成时会按壁纸尺寸裁切和缩放，原始照片保留在本机。
-- 在支持文件分享的浏览器里，可以通过分享菜单把壁纸存进相册。
+- Choose a sample or a local photo. Drag to reframe it and adjust the frame width, height, position, and background blur.
+- Preview the iPhone Lock Screen and the depth of the glass pane.
+- Export a lossless PNG at 1320 × 2868 or 2160 × 4693. Photos are cropped and resized on the device.
 
-直接打开 `index.html` 即可运行。
+Open `index.html` for the standalone editor, or serve the directory over HTTPS or localhost to enable PWA installation and offline use after the first visit.
 
-在支持空间场景的 iPhone 上，把 PNG 存进「照片」并设为锁屏壁纸。如果锁屏编辑页出现「空间场景」按钮，点按它并等待 iOS 生成效果。
+On iPhone, use Safari’s Share menu to add Stillglass to the Home Screen. To set the wallpaper, save the PNG to Photos and select it from the Lock Screen wallpaper editor. Tap Spatial Scene if iOS offers it for that image.
