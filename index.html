@@ -148,6 +148,7 @@ footer p { margin:0 0 12px }
       <fieldset class="settings" id="settings" aria-labelledby="settings-title" disabled>
         <div class="settings-head"><h2 id="settings-title">调整窗景</h2><button id="reset" type="button" class="text-button">重置</button></div>
         <label class="setting">窗格宽度<output id="sizeValue">83%</output><input id="size" type="range" min="48" max="90" value="83"></label>
+        <label class="setting">窗格高度<output id="frameHeightValue">自动</output><input id="frameHeight" type="range" min="15" max="55" value="45" aria-label="窗格高度"></label>
         <label class="setting">窗格垂直位置<output id="positionValue">56%</output><input id="position" type="range" min="40" max="70" value="56"></label>
         <label class="setting">背景虚化<output id="blurValue">65%</output><input id="blur" type="range" min="0" max="100" value="65"></label>
         <label class="setting">照片缩放<output id="zoomValue">115%</output><input id="zoom" type="range" min="100" max="250" value="115"></label>
@@ -171,6 +172,7 @@ const glass = el("glass");
 const hit = el("frame-hit");
 const stage = el("stage");
 const resolution = el("resolution");
+const frameHeight = el("frameHeight");
 const exportCanvas = document.createElement("canvas");
 exportCanvas.width = 1320;
 exportCanvas.height = 2868;
@@ -192,6 +194,7 @@ let panY = 0;
 let drag;
 let activeMotion;
 let renderedFile;
+let manualFrameHeight = false;
 
 const clamp = (value, min, max) => Math.max(min, Math.min(max, value));
 
@@ -257,12 +260,16 @@ function frameGeometry() {
   const [size, position, , zoom] = controls.map(control => Number(control.value));
   const w = width * size / 100;
   const ratio = clamp(photo.naturalWidth / photo.naturalHeight, .84, 1.45);
-  const h = w / ratio;
+  const h = manualFrameHeight ? height * Number(frameHeight.value) / 100 : w / ratio;
   return { x: (width - w) / 2, y: height * position / 100 - h / 2, w, h, zoom: zoom / 100 };
 }
 
 function placeHitTarget() {
   const { x, y, w, h } = frameGeometry();
+  if (!manualFrameHeight) frameHeight.value = Math.round(h / height * 100);
+  const heightLabel = (manualFrameHeight ? "" : "自动 · ") + frameHeight.value + "%";
+  el("frameHeightValue").textContent = heightLabel;
+  frameHeight.setAttribute("aria-valuetext", heightLabel);
   hit.style.left = x / width * 100 + "%";
   hit.style.top = y / height * 100 + "%";
   hit.style.width = w / width * 100 + "%";
@@ -456,7 +463,13 @@ controls.forEach(control => control.addEventListener("input", () => {
   updatePreview();
 }));
 
+frameHeight.addEventListener("input", () => {
+  manualFrameHeight = true;
+  updatePreview();
+});
+
 el("reset").addEventListener("click", () => {
+  manualFrameHeight = false;
   panX = 0;
   panY = 0;
   for (const control of controls) {
